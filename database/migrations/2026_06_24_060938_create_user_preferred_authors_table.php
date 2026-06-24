@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_preffered_categories', function (Blueprint $table) {
+        Schema::create('user_preferred_authors', function (Blueprint $table) {
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('source_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
-            $table->primary(['user_id', 'category_id']);
+            $table->primary(['user_id', 'source_id']);
         });
     }
 
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_preffered_categories');
+        Schema::dropIfExists('user_preffered_authors');
     }
 };

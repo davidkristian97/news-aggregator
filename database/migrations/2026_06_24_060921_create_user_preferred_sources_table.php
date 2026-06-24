@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_preffered_authors', function (Blueprint $table) {
+        Schema::create('user_preferred_sources', function (Blueprint $table) {
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('source_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_preffered_authors');
+        Schema::dropIfExists('user_preffered_sources');
     }
 };
