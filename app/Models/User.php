@@ -29,4 +29,16 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function sources() {
+        return $this->belongsToMany(Source::class, 'user_preferred_sources');
+    }
+
+    public function categories() {
+        return $this->belongsToMany(Category::class, 'user_preferred_categories');
+    }
+
+    public function authors() {
+        return $this->belongsToMany(Author::class, 'user_preferred_authors');
+    }
 }
