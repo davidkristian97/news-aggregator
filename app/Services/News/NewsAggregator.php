@@ -31,6 +31,12 @@ class NewsAggregator
         return $results;
     }
 
+    /** @return NewsProviderInterface[] */
+    public function providers(): array
+    {
+        return $this->providers;
+    }
+
     /**
      * Fetch from a single named provider, e.g. bySource('nyt').
      */
