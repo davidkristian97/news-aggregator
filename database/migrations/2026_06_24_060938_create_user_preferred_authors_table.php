@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('user_preferred_authors', function (Blueprint $table) {
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('source_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('author_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
-            $table->primary(['user_id', 'source_id']);
+            $table->primary(['user_id', 'author_id']);
         });
     }
 
