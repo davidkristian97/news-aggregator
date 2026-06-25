@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\IndexArticlesRequest;
 use App\Http\Resources\ArticleCollection;
+use App\Http\Resources\ArticleResource;
+use App\Models\Article;
 use App\Services\ArticleService;
 
 class ArticleController extends Controller
@@ -14,5 +16,10 @@ class ArticleController extends Controller
     {
         $paginator = $this->service->list($request->filters(), $request->perPage());
         return new ArticleCollection($paginator);
+    }
+
+    public function show(Article $article): ArticleResource
+    {
+        return new ArticleResource($article);
     }
 }
