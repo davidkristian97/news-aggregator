@@ -16,7 +16,7 @@ class ArticleController extends Controller
 
     public function index(IndexArticlesRequest $request): PaginatedDataResponse
     {
-        $paginator = $this->service->list($request->filters(), $request->perPage());
+        $paginator = $this->service->list($request->filters(), auth('sanctum')->user(), $request->perPage());
         return new PaginatedDataResponse(new ArticleCollection($paginator));
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use App\Repositories\ArticleRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -9,10 +10,34 @@ class ArticleService
 {
     public function __construct(private readonly ArticleRepository $repository) {}
 
-    public function list(array $filters, int $perPage = 20): LengthAwarePaginator
+    public function list(array $filters, ?User $user, int $perPage = 20): LengthAwarePaginator
     {
         $sanitized = $this->sanitizeFilters($filters);
+
+        if ($user) {
+            $sanitized = $this->mergePreferences($sanitized, $user);
+        }
+
         return $this->repository->paginate($sanitized, $perPage);
+    }
+
+    private function mergePreferences(array $filters, User $user): array
+    {
+        $user->load('sources', 'categories', 'authors');
+
+        if (empty($filters['source_ids'])) {
+            $filters['source_ids'] = $user->sources->pluck('id')->all();
+        }
+
+        if (empty($filters['category_ids'])) {
+            $filters['category_ids'] = $user->categories->pluck('id')->all();
+        }
+
+        if (empty($filters['author_ids'])) {
+            $filters['author_ids'] = $user->authors->pluck('id')->all();
+        }
+
+        return $filters;
     }
 
     private function sanitizeFilters(array $filters): array
