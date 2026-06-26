@@ -42,6 +42,7 @@ class NewsApiProvider implements NewsProviderInterface
             'published_at' => $a['publishedAt'] ?? null,
             'authors'      => $a['author'] ? array_map('trim', explode(',', $a['author'])) : [],
             'category'     => $params['category'] ?? null,
+            'source'       => $a['source']['name'] ?? null,
         ])->filter(fn ($a) => ! empty($a['title']) && ! empty($a['url']));
     }
 }

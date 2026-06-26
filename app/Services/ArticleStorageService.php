@@ -14,14 +14,12 @@ class ArticleStorageService
 {
     public function saveArticles(Collection $articles, string $sourceName): int
     {
-        // Resolve the source once for the whole batch — all articles from one provider share it.
-        $source = Source::firstOrCreate(['name' => $sourceName]);
-
         $saved = 0;
 
         foreach ($articles as $data) {
             // Each article is its own transaction so one bad row doesn't abort the whole batch.
-            DB::transaction(function () use ($data, $source, &$saved) {
+            DB::transaction(function () use ($data, $sourceName, &$saved) {
+                $source = Source::firstOrCreate(['name' => $data['source'] ?? $sourceName]);
                 $category = !empty($data['category'])
                     ? Category::firstOrCreate(['name' => $data['category']])
                     : null;
