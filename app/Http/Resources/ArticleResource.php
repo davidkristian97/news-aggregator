@@ -24,7 +24,7 @@ class ArticleResource extends JsonResource
                 'name' => $this->category->name
             ] : null,
             'authors' => $this->authors->map(fn ($author) => [
-                'id'   => $author->id,
+                'id' => $author->id,
                 'name' => $author->name,
             ])
         ];

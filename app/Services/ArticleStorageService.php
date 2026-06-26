@@ -30,9 +30,9 @@ class ArticleStorageService
                     // (source_id, url) is the de-dup key — same article from the same source won't insert twice.
                     ['source_id' => $source->id, 'url' => $data['url']],
                     [
-                        'category_id'  => $category?->id,
-                        'title'        => $data['title'],
-                        'description'  => $data['description'] ?? null,
+                        'category_id' => $category?->id,
+                        'title' => $data['title'],
+                        'description' => $data['description'] ?? null,
                         'published_at' => $this->parseDate($data['published_at'] ?? null),
                     ]
                 );

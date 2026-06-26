@@ -19,7 +19,7 @@ class AuthController extends Controller
 
         return new SuccessResponse([
             'token' => $result['token'],
-            'user'  => new UserResource($result['user']),
+            'user' => new UserResource($result['user']),
         ], 'Registered successfully.', 201);
     }
 
@@ -29,14 +29,13 @@ class AuthController extends Controller
 
         return new SuccessResponse([
             'token' => $result['token'],
-            'user'  => new UserResource($result['user']),
+            'user' => new UserResource($result['user']),
         ], 'Login successful.');
     }
 
     public function logout(Request $request): SuccessResponse
     {
         $this->service->logout($request->user());
-
         return new SuccessResponse(null, 'Logged out successfully.');
     }
 }
