@@ -3,7 +3,6 @@
 namespace Tests\Feature\Articles;
 
 use App\Models\Article;
-use App\Models\Author;
 use App\Models\Category;
 use App\Models\Source;
 use App\Models\User;
@@ -62,19 +61,28 @@ class ArticleIndexTest extends TestCase
             ->assertJsonCount(1, 'data');
     }
 
-    public function test_preferences_applied_when_authenticated(): void
+    public function test_preferences_boost_articles_to_top(): void
     {
-        $source = Source::factory()->create();
-        Article::factory(2)->create(['source_id' => $source->id]);
-        Article::factory(3)->create();
+        $preferredSource = Source::factory()->create();
+        $otherSource = Source::factory()->create();
+
+        $preferredArticle = Article::factory()->create([
+            'source_id' => $preferredSource->id,
+            'published_at' => now()->subMinutes(10),
+        ]);
+        Article::factory()->create([
+            'source_id' => $otherSource->id,
+            'published_at' => now()->subMinutes(5),
+        ]);
 
         $user = User::factory()->create();
-        $user->sources()->attach($source->id);
+        $user->sources()->attach($preferredSource->id);
 
         Sanctum::actingAs($user);
 
-        $this->getJson('/api/articles')
-            ->assertOk()
-            ->assertJsonCount(2, 'data');
+        $response = $this->getJson('/api/articles')->assertOk();
+
+        $response->assertJsonCount(2, 'data');
+        $response->assertJsonPath('data.0.id', $preferredArticle->id);
     }
 }

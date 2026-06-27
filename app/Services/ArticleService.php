@@ -13,31 +13,20 @@ class ArticleService
     public function list(array $filters, ?User $user, int $perPage = 20): LengthAwarePaginator
     {
         $sanitized = $this->sanitizeFilters($filters);
+        $preferences = $user ? $this->getPreferences($user) : [];
 
-        if ($user) {
-            $sanitized = $this->mergePreferences($sanitized, $user);
-        }
-
-        return $this->repository->paginate($sanitized, $perPage);
+        return $this->repository->paginate($sanitized, $perPage, $preferences);
     }
 
-    private function mergePreferences(array $filters, User $user): array
+    private function getPreferences(User $user): array
     {
         $user->load('sources', 'categories', 'authors');
 
-        if (empty($filters['source_ids'])) {
-            $filters['source_ids'] = $user->sources->pluck('id')->all();
-        }
-
-        if (empty($filters['category_ids'])) {
-            $filters['category_ids'] = $user->categories->pluck('id')->all();
-        }
-
-        if (empty($filters['author_ids'])) {
-            $filters['author_ids'] = $user->authors->pluck('id')->all();
-        }
-
-        return $filters;
+        return [
+            'source_ids' => $user->sources->pluck('id')->all(),
+            'category_ids' => $user->categories->pluck('id')->all(),
+            'author_ids' => $user->authors->pluck('id')->all(),
+        ];
     }
 
     private function sanitizeFilters(array $filters): array
