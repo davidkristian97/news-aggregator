@@ -4,6 +4,8 @@ namespace App\Services\News;
 
 use App\Services\News\Contracts\NewsProviderInterface;
 use Illuminate\Support\Collection;
+use InvalidArgumentException;
+use Throwable;
 
 class NewsAggregator
 {
@@ -23,7 +25,7 @@ class NewsAggregator
         foreach ($this->providers as $provider) {
             try {
                 $results = $results->merge($provider->fetch());
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 report($e);
             }
         }
@@ -44,7 +46,7 @@ class NewsAggregator
     {
         $provider = collect($this->providers)->first(fn ($p) => $p->key() === $key);
 
-        throw_if(!$provider, \InvalidArgumentException::class, "Unknown source: {$key}");
+        throw_if(!$provider, InvalidArgumentException::class, "Unknown source: {$key}");
 
         return $provider->fetch();
     }

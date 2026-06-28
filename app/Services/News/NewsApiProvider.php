@@ -17,7 +17,7 @@ class NewsApiProvider implements NewsProviderInterface
 
     public function name(): string
     {
-        return 'NewsAPI.org';
+        return 'NewsAPI';
     }
 
     public function fetch(array $params = []): Collection
@@ -27,7 +27,7 @@ class NewsApiProvider implements NewsProviderInterface
             ->get('https://newsapi.org/v2/top-headlines', array_merge([
                 'apiKey' => $this->apiKey,
                 'language' => 'en',
-                'pageSize' => 20,
+                'pageSize' => 100,
                 'sortBy' => 'publishedAt',
             ], $params));
 

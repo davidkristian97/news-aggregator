@@ -27,7 +27,7 @@ class GuardianProvider implements NewsProviderInterface
             ->get('https://content.guardianapis.com/search', array_merge([
                 'api-key'     => $this->apiKey,
                 'show-fields' => 'byline,trailText',
-                'page-size'   => 20,
+                'page-size'   => 200,
                 'order-by'    => 'newest',
             ], $params));
 

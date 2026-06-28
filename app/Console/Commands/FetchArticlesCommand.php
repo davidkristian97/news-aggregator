@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Services\ArticleStorageService;
+use App\Services\News\Contracts\NewsProviderInterface;
 use App\Services\News\NewsAggregator;
 use Illuminate\Console\Command;
 
@@ -50,7 +51,7 @@ class FetchArticlesCommand extends Command
         return self::SUCCESS;
     }
 
-    private function fetchNewsApi(\App\Services\News\Contracts\NewsProviderInterface $provider): int
+    private function fetchNewsApi(NewsProviderInterface $provider): int
     {
         $categories = ['Business', 'Entertainment', 'General', 'Health', 'Science', 'Sports', 'Technology'];
         $saved = 0;
