@@ -465,10 +465,9 @@
                     {
                         "name": "q",
                         "in": "query",
-                        "required": true,
+                        "required": false,
                         "schema": {
-                            "type": "string",
-                            "minLength": 2
+                            "type": "string"
                         },
                         "example": "BBC"
                     }
@@ -566,10 +565,9 @@
                     {
                         "name": "q",
                         "in": "query",
-                        "required": true,
+                        "required": false,
                         "schema": {
-                            "type": "string",
-                            "minLength": 2
+                            "type": "string"
                         },
                         "example": "John"
                     }

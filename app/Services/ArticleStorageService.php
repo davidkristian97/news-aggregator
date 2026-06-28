@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Source;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class ArticleStorageService
@@ -46,6 +47,8 @@ class ArticleStorageService
                 $saved++;
             });
         }
+
+        Cache::tags(['filters'])->flush();
 
         return $saved;
     }

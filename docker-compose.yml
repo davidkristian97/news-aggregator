@@ -6,6 +6,7 @@ services:
     env_file: .env
     environment:
       DB_HOST: db
+      REDIS_HOST: redis
     command: >
       sh -c "php artisan package:discover --ansi &&
              php artisan migrate --force &&
@@ -14,15 +15,20 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_healthy
 
   scheduler:
     build: .
     env_file: .env
     environment:
       DB_HOST: db
+      REDIS_HOST: redis
     command: php artisan schedule:work
     depends_on:
       db:
+        condition: service_healthy
+      redis:
         condition: service_healthy
 
   db:
@@ -34,6 +40,14 @@ services:
       - dbdata:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${DB_PASSWORD:-secret}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 3s
       retries: 10

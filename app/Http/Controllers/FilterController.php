@@ -16,7 +16,7 @@ class FilterController extends Controller
      *     path="/filters/sources",
      *     tags={"Filters"},
      *     summary="Search sources by name",
-     *     @OA\Parameter(name="q", in="query", required=true, @OA\Schema(type="string", minLength=2), example="BBC"),
+     *     @OA\Parameter(name="q", in="query", required=false, @OA\Schema(type="string"), example="BBC"),
      *     @OA\Response(
      *         response=200,
      *         description="Matching sources",
@@ -64,7 +64,7 @@ class FilterController extends Controller
      *     path="/filters/authors",
      *     tags={"Filters"},
      *     summary="Search authors by name",
-     *     @OA\Parameter(name="q", in="query", required=true, @OA\Schema(type="string", minLength=2), example="John"),
+     *     @OA\Parameter(name="q", in="query", required=false, @OA\Schema(type="string"), example="John"),
      *     @OA\Response(
      *         response=200,
      *         description="Matching authors",

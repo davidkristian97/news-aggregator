@@ -6,11 +6,18 @@ use App\Models\Author;
 use App\Models\Category;
 use App\Models\Source;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
 
 class FilterTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Cache::flush();
+    }
 
     public function test_get_all_categories(): void
     {
@@ -22,18 +29,14 @@ class FilterTest extends TestCase
             ->assertJsonCount(3, 'data');
     }
 
-    public function test_search_sources_requires_q(): void
+    public function test_get_all_sources_without_query(): void
     {
-        $this->getJson('/api/filters/sources')
-            ->assertUnprocessable()
-            ->assertJsonPath('success', false);
-    }
+        Source::factory(3)->create();
 
-    public function test_search_sources_requires_minimum_two_chars(): void
-    {
-        $this->getJson('/api/filters/sources?q=a')
-            ->assertUnprocessable()
-            ->assertJsonPath('success', false);
+        $this->getJson('/api/filters/sources')
+            ->assertOk()
+            ->assertJsonPath('success', true)
+            ->assertJsonCount(3, 'data');
     }
 
     public function test_search_sources_returns_matches(): void
@@ -47,18 +50,14 @@ class FilterTest extends TestCase
             ->assertJsonPath('data.0.name', 'NYT');
     }
 
-    public function test_search_authors_requires_q(): void
+    public function test_get_all_authors_without_query(): void
     {
-        $this->getJson('/api/filters/authors')
-            ->assertUnprocessable()
-            ->assertJsonPath('success', false);
-    }
+        Author::factory(3)->create();
 
-    public function test_search_authors_requires_minimum_two_chars(): void
-    {
-        $this->getJson('/api/filters/authors?q=a')
-            ->assertUnprocessable()
-            ->assertJsonPath('success', false);
+        $this->getJson('/api/filters/authors')
+            ->assertOk()
+            ->assertJsonPath('success', true)
+            ->assertJsonCount(3, 'data');
     }
 
     public function test_search_authors_returns_matches(): void

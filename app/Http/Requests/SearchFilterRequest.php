@@ -9,11 +9,11 @@ class SearchFilterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'q' => ['required', 'string', 'min:2'],
+            'q' => ['nullable', 'string'],
         ];
     }
 
-    public function searchTerm(): string
+    public function searchTerm(): ?string
     {
         return $this->input('q');
     }

@@ -9,9 +9,11 @@ use Illuminate\Support\Collection;
 
 class FilterRepository
 {
-    public function searchSources(string $q): Collection
+    public function searchSources(?string $q): Collection
     {
-        return Source::where('name', 'like', "%{$q}%")->orderBy('name')->get();
+        return Source::when($q, fn ($query) => $query->where('name', 'like', "%{$q}%"))
+            ->orderBy('name')
+            ->get();
     }
 
     public function allCategories(): Collection
@@ -19,8 +21,10 @@ class FilterRepository
         return Category::orderBy('name')->get();
     }
 
-    public function searchAuthors(string $q): Collection
+    public function searchAuthors(?string $q): Collection
     {
-        return Author::where('name', 'like', "%{$q}%")->orderBy('name')->get();
+        return Author::when($q, fn ($query) => $query->where('name', 'like', "%{$q}%"))
+            ->orderBy('name')
+            ->get();
     }
 }

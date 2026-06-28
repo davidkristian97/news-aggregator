@@ -1,9 +1,12 @@
 FROM php:8.4-cli-alpine
 
 RUN apk add --no-cache \
-    curl zip unzip \
+    curl zip unzip autoconf g++ make \
     libxml2-dev libzip-dev oniguruma-dev \
-    && docker-php-ext-install pdo_mysql mbstring xml zip bcmath
+    && docker-php-ext-install pdo_mysql mbstring xml zip bcmath \
+    && pecl install redis \
+    && docker-php-ext-enable redis \
+    && apk del autoconf g++ make
 
 WORKDIR /var/www
 
