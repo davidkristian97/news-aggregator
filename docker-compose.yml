@@ -7,6 +7,7 @@ services:
     environment:
       DB_HOST: db
       REDIS_HOST: redis
+      REDIS_CLIENT: phpredis
     command: >
       sh -c "php artisan package:discover --ansi &&
              php artisan migrate --force &&
@@ -24,6 +25,7 @@ services:
     environment:
       DB_HOST: db
       REDIS_HOST: redis
+      REDIS_CLIENT: phpredis
     command: php artisan schedule:work
     depends_on:
       db:

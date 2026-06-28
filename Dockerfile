@@ -8,8 +8,12 @@ RUN apk add --no-cache \
     && docker-php-ext-enable redis \
     && apk del autoconf g++ make
 
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
 WORKDIR /var/www
 
 COPY . .
+
+RUN composer install --no-dev --optimize-autoloader
 
 EXPOSE 8000
