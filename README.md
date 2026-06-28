@@ -4,12 +4,12 @@ A REST API that pulls articles from **NewsAPI**, **The Guardian**, and **The New
 
 ## Tech Stack
 
-- **Framework** — Laravel 13 (PHP 8.4)
-- **Database** — MySQL 8
-- **Caching** — Redis 7
+- **Framework** — Laravel (PHP)
+- **Database** — MySQL
+- **Caching** — Redis
 - **Authentication** — Laravel Sanctum (token-based)
 - **API Docs** — Swagger (L5-Swagger)
-- **Containerisation** — Docker & Docker Compose
+- **Containerization** — Docker
 
 ## Features
 
@@ -20,14 +20,20 @@ A REST API that pulls articles from **NewsAPI**, **The Guardian**, and **The New
   - Preferred sources
   - Preferred categories
   - Preferred authors
-- Scheduled hourly article fetching
+- Scheduled two hourly article fetching
 - Swagger UI for interactive API exploration
 - Dockerised setup with automated migrations and seeding on first boot
 - Feature test suite covering auth, articles, filters, and preferences
 
-## Fetching Articles
+## How The Articles Are Fetched
 
-Migrations and an initial article fetch run automatically on first boot. A dedicated scheduler container also starts alongside the app, running `php artisan schedule:work` to fetch new articles every hour — no additional setup needed.
+Migrations and an initial article fetch run automatically on first boot. A dedicated scheduler container also starts alongside the app, running `php artisan schedule:work` to fetch new articles every two hours — no additional setup needed.
+
+Each provider implements a shared `NewsProviderInterface` and normalises its response into a common format before saving.
+
+- **NewsAPI** — loops through 7 categories (Business, Entertainment, General, Health, Science, Sports, Technology), fetching up to 100 articles each — up to 700 per fetch. Authors come back as a comma-separated string and are split into individual entries.
+- **The Guardian** — fetches up to 200 results ordered by newest. Includes section name as the category. Bylines like "Alice Smith and Bob Jones" are parsed into separate authors.
+- **New York Times** — uses the Article Search API. Strips "By " prefixes from bylines and filters out correction articles before saving.
 
 ## Architecture
 
@@ -89,7 +95,6 @@ git clone <repo-url>
 cd news-aggregator
 
 cp .env.example .env
-php artisan key:generate
 ```
 
 Open `.env` and fill in your API keys:
@@ -104,6 +109,12 @@ Then start everything:
 
 ```bash
 docker compose up -d --build
+```
+
+Then generate the application key:
+
+```bash
+docker compose exec app php artisan key:generate
 ```
 
 Migrations and an initial article fetch run automatically on first boot.
