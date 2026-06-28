@@ -105,15 +105,16 @@ GUARDIAN_API_KEY=your_guardian_key
 NYT_API_KEY=your_nyt_key
 ```
 
-Then start everything:
+To build the image and start everything:
 
 ```bash
 docker compose up -d --build
 ```
 
-Then generate the application key:
+Composer Install and Generate the application key:
 
 ```bash
+docker compose exec app composer install
 docker compose exec app php artisan key:generate
 ```
 
@@ -168,5 +169,5 @@ php artisan serve
 Feature tests cover authentication, article listing and filtering, user preferences, and filter endpoints.
 
 ```bash
-php artisan test
+docker compose exec app php artisan test
 ```

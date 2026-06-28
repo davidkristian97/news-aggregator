@@ -14,6 +14,7 @@ WORKDIR /var/www
 
 COPY . .
 
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader --no-scripts && \
+    rm -f bootstrap/cache/*.php
 
 EXPOSE 8000

@@ -8,6 +8,8 @@ services:
       DB_HOST: db
       REDIS_HOST: redis
       REDIS_CLIENT: phpredis
+    volumes:
+      - ./.env:/var/www/.env
     command: >
       sh -c "php artisan package:discover --ansi &&
              php artisan migrate --force &&
